@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-3x$+f2lu3rktr6$=%f+wc!*5&kp=n*d(1l9ccfh2_y&loz&q%c
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['kwesimain.github.io/test2']
+ALLOWED_HOSTS = []
 
 
 # Application definition

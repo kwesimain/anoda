@@ -1,7 +1,9 @@
 from django.urls import path
-from . import user_views, flags_views, event_views, chat_views, steeze_views
+from . import views, user_views, flags_views, event_views, chat_views, steeze_views
 
 urlpatterns = [
+    path('', views.homepage, name='home'),
+
     # Event URLs
     path('events/', event_views.EventsListCreateView.as_view(), name='event-list'),
     path('events/<int:pk>/', event_views.EventsRetrieveUpdateDestroyView.as_view(), name='event-detail'),

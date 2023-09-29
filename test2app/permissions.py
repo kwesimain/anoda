@@ -4,7 +4,7 @@ class IsOwnerOrReadOnly(permissions.BasePermission):
     """
     Custom permission to only allow owners of an object to edit or delete it.
     """
-    def has_object_permission(self, request, view, obj):
+    def has_object_permission(self, request, obj):
         # Read permissions are allowed to any request
         if request.method in permissions.SAFE_METHODS:
             return True
