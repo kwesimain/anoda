@@ -1,5 +1,5 @@
 from rest_framework import generics, status, permissions
-from .serializers import UserRegSerializer, UserUpdateLogsSerializer
+from .serializers import UserRegSerializer, UserUpdateLogsSerializer, UserProfileSerializer
 from .models import Userprofile
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.permissions import IsAuthenticated

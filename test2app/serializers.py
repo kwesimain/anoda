@@ -30,6 +30,10 @@ class UserUpdateLogsSerializer(serializers.ModelSerializer):
         return super().update(instance, validated_data)
 
 
+class UserProfileSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Userprofile
+        fields = '__all__'
 
 class ChatSerializer(serializers.ModelSerializer):
     class Meta:

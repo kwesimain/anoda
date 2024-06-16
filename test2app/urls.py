@@ -1,5 +1,5 @@
 from django.urls import path
-from . import views, UserRegView, user_views, flags_views, event_views, chat_views, steeze_views
+from . import views, user_views, flags_views, event_views, chat_views, steeze_views
 
 urlpatterns = [
     path('', views.homepage, name='home'),
@@ -44,4 +44,5 @@ urlpatterns = [
     path('userprofiles/', user_views.UserProfileListCreateView.as_view(), name='userprofile-list-create'),
     path('userprofile/<int:pk>/', user_views.UserProfileRetrieveUpdateDestroyView.as_view(), name='userprofile-detail'),
     path('login/', user_views.UserLoginView.as_view(), name='user-login'),
+    path('register/', user_views.UserRegView.as_view(), name='user-login'),
 ]
