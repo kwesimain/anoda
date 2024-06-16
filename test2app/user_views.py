@@ -1,5 +1,5 @@
 from rest_framework import generics, status, permissions
-from .serializers import UserProfileSerializer
+from .serializers import UserRegSerializer, UserUpdateLogsSerializer
 from .models import Userprofile
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.permissions import IsAuthenticated
@@ -10,32 +10,41 @@ from rest_framework.response import Response
 from django.contrib.auth.models import User
 
 
-class UserRegistrationView(generics.CreateAPIView):
+class UserRegView(generics.CreateAPIView):
     queryset = Userprofile.objects.all()
-    serializer_class = UserProfileSerializer  # Use your custom serializer
+    serializer_class = UserRegSerializer  # Use your custom serializer
     permission_classes = [AllowAny]  # Allow unauthenticated users to register
 
-    def perform_create(self, serializer):
-        # Access form data using self.request.POST
-        username = self.request.POST.get('username')
-        password = self.request.POST.get('password')
+    def create(self, request, *args, **kwargs):
+        phone = request.data.get('phone')
+        if not phone:
+            return Response({"error": "Phone number is required"}, status=status.HTTP_400_BAD_REQUEST)
 
-        # Create a User instance
-        user = User(username=username)
-        user.set_password(password)
+        # Create a User instance with a unique username (could be the phone number or any unique identifier)
+        user = User.objects.create(username=phone)
+        user.set_unusable_password()
         user.save()
 
         # Create a Userprofile instance associated with the user
-        userprofile = Userprofile(user=user)
+        userprofile = Userprofile(user=user, phone=phone)
         userprofile.save()
 
-        # Return the Userprofile associated with the newly created user
-        return userprofile
+        return Response({"message": "User registered successfully"}, status=status.HTTP_201_CREATED)
+    
 
+class UserUpdateLogsView(generics.UpdateAPIView):
+    queryset = Userprofile.objects.all()
+    serializer_class = UserUpdateLogsSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_object(self):
+        # Assuming phone number is used to fetch the profile, adjust as necessary
+        phone = self.request.data.get('phone')
+        return Userprofile.objects.get(phone=phone)
 
 class UserProfileListCreateView(generics.ListCreateAPIView):
     queryset = Userprofile.objects.all()
-    serializer_class = UserProfileSerializer
+    serializer_class = UserRegSerializer
     authentication_classes = [TokenAuthentication]
     permission_classes = [IsAuthenticated]
 
@@ -49,7 +58,7 @@ class UserProfileListCreateView(generics.ListCreateAPIView):
 
 class UserProfileRetrieveUpdateDestroyView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Userprofile.objects.all()
-    serializer_class = UserProfileSerializer
+    serializer_class = UserRegSerializer
     authentication_classes = [TokenAuthentication]
     permission_classes = [IsAuthenticated]
 

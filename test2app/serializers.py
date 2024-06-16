@@ -1,10 +1,34 @@
 from rest_framework import serializers
 from .models import FlagRequest, Userprofile, Chat, Message, VerificationStatus, VerificationRq,  SteezeLikes, SteezeCom, Steeze, RelationRq,  OrganizersRq, OrgStatus, Flags, Event
 
-class UserProfileSerializer(serializers.ModelSerializer):
+class UserRegSerializer(serializers.ModelSerializer):
     class Meta:
         model = Userprofile
-        fields = '__all__'
+        fields = ['phone']
+
+    def create(self, validated_data):
+        return Userprofile.objects.create(**validated_data)
+
+class UserUpdateLogsSerializer(serializers.ModelSerializer):
+    username = serializers.CharField(write_only=True)
+    password = serializers.CharField(write_only=True)
+
+    class Meta:
+        model = Userprofile
+        fields = ['username', 'password']
+
+    def update(self, instance, validated_data):
+        username = validated_data.pop('username')
+        password = validated_data.pop('password')
+
+        user = Userprofile(username=username)
+        user.set_password(password)
+        user.save()
+
+        instance.user = user
+        instance.save()
+        return super().update(instance, validated_data)
+
 
 
 class ChatSerializer(serializers.ModelSerializer):

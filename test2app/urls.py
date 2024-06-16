@@ -1,8 +1,10 @@
 from django.urls import path
-from . import views, user_views, flags_views, event_views, chat_views, steeze_views
+from . import views, UserRegView, user_views, flags_views, event_views, chat_views, steeze_views
 
 urlpatterns = [
     path('', views.homepage, name='home'),
+    path('registration/', user_views.UserRegView.as_view(), name='Registration'),
+    path('logs_update/', user_views.UserUpdateLogsView.as_view(), name='Update username and password'),
 
     # Event URLs
     path('events/', event_views.EventsListCreateView.as_view(), name='event-list'),

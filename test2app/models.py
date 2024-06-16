@@ -116,7 +116,6 @@ class SteezeLikes(models.Model):
 
 
 class Userprofile(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
     following = models.ManyToManyField('self', related_name='followers', blank=True)
     phone = models.CharField(max_length=45, blank=True, null=True)
     username = models.CharField(max_length=45, blank=True, null=True)
